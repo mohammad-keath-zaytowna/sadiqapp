@@ -4,13 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open SadiqApp</title>
- <script>
+  <script>
 function openApp() {
-  const appScheme = "sadiqapp://";
   const androidStore = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
   const iosStore = "https://apps.apple.com/app/id6746932590";
-
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  // Get "dir" query parameter
+  const params = new URLSearchParams(window.location.search);
+  const dir = params.get('dir') || ''; // default empty if not present
+
+  // Build app scheme with path
+  const appScheme = `sadiqapp://${dir}`;
 
   // Flag to check if user left the page
   let appOpened = false;
@@ -38,11 +43,10 @@ function openApp() {
     }
   }, 2500);
 }
-</script>
-
+  </script>
 </head>
 <body onload="openApp()">
   <h1>Opening SadiqApp…</h1>
-  <p>If nothing happens, <a href="sadiqapp://">click here</a>.</p>
+  <p>If nothing happens, <a href="#">click here</a>.</p>
 </body>
 </html>
