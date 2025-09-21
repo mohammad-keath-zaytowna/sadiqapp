@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open SadiqApp</title>
+  <script>
+    function openApp() {
+      const appScheme = "sadiqapp://";
+      const androidStore = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
+      const iosStore = "https://apps.apple.com/app/idYOUR_APPLE_ID"; // replace with your App Store ID
+
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      // Try to open app
+      window.location.href = appScheme;
+
+      // If app not installed, fallback after 1.5s
+      setTimeout(() => {
+        if (/android/i.test(userAgent)) {
+          window.location.href = androidStore;
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          window.location.href = iosStore;
+        } else {
+          // fallback for desktop or unknown devices
+          alert("Please open this link on your mobile device to launch the app.");
+        }
+      }, 1500);
+    }
+  </script>
+</head>
+<body onload="openApp()">
+  <h1>Opening SadiqApp…</h1>
+  <p>If nothing happens, <a href="sadiqapp://">click here</a>.</p>
+</body>
+</html>
