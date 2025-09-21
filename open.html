@@ -4,30 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open SadiqApp</title>
-  <script>
-    function openApp() {
-      const appScheme = "sadiqapp://";
-      const androidStore = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
-      const iosStore = "https://apps.apple.com/app/id6746932590"; // replace with your App Store ID
+ <script>
+function openApp() {
+  const appScheme = "sadiqapp://";
+  const androidStore = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
+  const iosStore = "https://apps.apple.com/app/id6746932590";
 
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-      // Try to open app
-      window.location.href = appScheme;
+  // Flag to check if user left the page
+  let appOpened = false;
 
-      // If app not installed, fallback after 1.5s
-      setTimeout(() => {
-        if (/android/i.test(userAgent)) {
-          window.location.href = androidStore;
-        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-          window.location.href = iosStore;
-        } else {
-          // fallback for desktop or unknown devices
-          alert("Please open this link on your mobile device to launch the app.");
-        }
-      }, 2500);
+  // Listen if the page becomes hidden (user switched to app)
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      appOpened = true;
     }
-  </script>
+  });
+
+  // Attempt to open app
+  window.location.href = appScheme;
+
+  // Fallback after 2.5s if app did not open
+  setTimeout(() => {
+    if (appOpened) return; // app opened, cancel fallback
+
+    if (/android/i.test(userAgent)) {
+      window.location.href = androidStore;
+    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      window.location.href = iosStore;
+    } else {
+      alert("Please open this link on your mobile device to launch the app.");
+    }
+  }, 2500);
+}
+</script>
+
 </head>
 <body onload="openApp()">
   <h1>Opening SadiqApp…</h1>
