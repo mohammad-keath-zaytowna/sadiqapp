@@ -9,8 +9,7 @@ function openApp() {
   const androidStore = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
   const iosStore = "https://apps.apple.com/app/id6746932590";
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-  // Detect if opened in Facebook or Messenger in-app browser
+console.log(userAgent)
   const isMessenger = /FBAN|FBAV|Messenger/i.test(userAgent);
 
   if (isMessenger) {
@@ -52,9 +51,7 @@ function openApp() {
     }
   }, 2500);
 }
-
-// Function triggered by user click
-function openAppOnClick() {
+    function openAppOnClick() {
   const params = new URLSearchParams(window.location.search);
   const dir = params.get('dir') || '';
   window.location.href = `sadiqapp://${dir}`;
