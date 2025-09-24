@@ -7,5 +7,12 @@
         "paths": [ "/sadiqapp/open/*" ]
       }
     ]
+  },
+   "activitycontinuation": {
+    "apps": ["9Z74ZT99FA.com.ahmadsamman.sadiqapp"]
+  },
+  // This section enable Shared Web Credentials
+  "webcredentials": {
+    "apps": ["9Z74ZT99FA.com.ahmadsamman.sadiqapp"]
   }
 }
