@@ -4,62 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open SadiqApp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
   <script>
-function openApp() {
-  const androidStore = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
-  const iosStore = "https://apps.apple.com/app/id6746932590";
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-console.log(userAgent)
-  const isMessenger = /FBAN|FBAV|Messenger/i.test(userAgent);
-
-  if (isMessenger) {
-    // Stop automatic redirect, user should click the link
-    console.log("Messenger detected, wait for user click");
-    return;
-  }
-
-  // Get "dir" query parameter
-  const params = new URLSearchParams(window.location.search);
-  const dir = params.get('dir') || ''; // default empty if not present
-
-  // Build app scheme with path
-  const appScheme = `sadiqapp://${dir}`;
-
-  // Flag to check if user left the page
-  let appOpened = false;
-
-  // Listen if the page becomes hidden (user switched to app)
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      appOpened = true;
+    function isMessenger() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      return /FBAN|FBAV|Messenger/i.test(ua);
     }
-  });
 
-  // Attempt to open app
-  window.location.href = appScheme;
+    function openApp() {
+      const params = new URLSearchParams(window.location.search);
+      const dir = params.get('dir') || '';
+      const appScheme = `sadiqapp://${dir}`;
 
-  // Fallback after 2.5s if app did not open
-  setTimeout(() => {
-    if (appOpened) return; // app opened, cancel fallback
+      // Try to open the app
+      window.location.href = appScheme;
 
-    if (/android/i.test(userAgent)) {
-      window.location.href = androidStore;
-    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-      window.location.href = iosStore;
-    } else {
-      alert("Please open this link on your mobile device to launch the app.");
+      // Fallback to store after 1.5s
+      setTimeout(() => {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(ua)) {
+          window.location.href = "https://play.google.com/store/apps/details?id=com.ahmadsamman.sadiq";
+        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+          window.location.href = "https://apps.apple.com/app/id6746932590";
+        } else {
+          alert("Please open this link on a mobile device to launch the app.");
+        }
+      }, 1500);
     }
-  }, 2500);
-}
-    function openAppOnClick() {
-  const params = new URLSearchParams(window.location.search);
-  const dir = params.get('dir') || '';
-  window.location.href = `sadiqapp://${dir}`;
-}
+
+    window.onload = () => {
+      if (isMessenger()) {
+        // Show instructions for Messenger users
+        document.getElementById('messengerNotice').style.display = 'block';
+      } else {
+        // Normal browser: auto try to open app
+        openApp();
+      }
+    };
   </script>
 </head>
-<body onload="openApp()">
-  <h1>Opening SadiqApp…</h1>
-  <p>If nothing happens, <a href="sadiqapp://">click here</a>.</p>
+<body>
+  <h1>Open SadiqApp</h1>
+  
+  <p id="messengerNotice" style="display:none;">
+    You are in Facebook Messenger. Tap the button below and then select "Open in Browser" from the Messenger menu to launch the app.
+  </p>
+  
+  <button onclick="openApp()">Open App</button>
+  
+  <p style="margin-top:20px;">If the app is not installed, you will be redirected to the App Store or Play Store.</p>
 </body>
 </html>
