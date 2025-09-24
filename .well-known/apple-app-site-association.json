@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "9Z74ZT99FA.com.ahmadsamman.sadiqapp",
+        "paths": [ "/sadiqapp/open/*" ]
+      }
+    ]
+  }
+}
