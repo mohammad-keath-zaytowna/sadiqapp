@@ -10,12 +10,21 @@ function openApp() {
   const iosStore = "https://apps.apple.com/app/id6746932590";
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
+  // Detect if opened in Facebook or Messenger in-app browser
+  const isMessenger = /FBAN|FBAV|Messenger/i.test(userAgent);
+
+  if (isMessenger) {
+    // Stop automatic redirect, user should click the link
+    console.log("Messenger detected, wait for user click");
+    return;
+  }
+
   // Get "dir" query parameter
   const params = new URLSearchParams(window.location.search);
   const dir = params.get('dir') || ''; // default empty if not present
 
   // Build app scheme with path
-  const appScheme = `https:sadiqapp://${dir}`;
+  const appScheme = `sadiqapp://${dir}`;
 
   // Flag to check if user left the page
   let appOpened = false;
@@ -43,10 +52,17 @@ function openApp() {
     }
   }, 2500);
 }
+
+// Function triggered by user click
+function openAppOnClick() {
+  const params = new URLSearchParams(window.location.search);
+  const dir = params.get('dir') || '';
+  window.location.href = `sadiqapp://${dir}`;
+}
   </script>
 </head>
 <body onload="openApp()">
   <h1>Opening SadiqApp…</h1>
-  <p>If nothing happens, <a href="#">click here</a>.</p>
+  <p>If nothing happens, <a href="javascript:void(0)" onclick="openAppOnClick()">click here</a>.</p>
 </body>
 </html>
